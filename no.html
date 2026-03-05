@@ -62,7 +62,7 @@
         <h2>AYAW MO FRIEND AKO?</h2>
 
         <button class="yes" @click="goFinal('Yes')">YES</button>
-        <button class="no" @click="goFinal('No')">NO</button>
+        <button class="no" @click="goQuestion">NO</button>
       </div>
     </div>
 
@@ -74,8 +74,12 @@
           goFinal(choice) {
             // Save final choice to localStorage
             localStorage.setItem("finalChoice", choice);
-            window.location.href = "final.html"; // Go to the final page
+            window.location.href = "confirm.html"; // YES goes to confirm page
           },
+          goQuestion() {
+            // NO goes back to question.html
+            window.location.href = "confirm.html";
+          }
         },
       }).mount("#app");
     </script>
