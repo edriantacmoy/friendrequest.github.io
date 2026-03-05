@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Friendship Question</title>
+    <title>Friendship Confirmation</title>
     <script src="https://unpkg.com/vue@3"></script>
     <style>
       body {
@@ -53,9 +53,9 @@
     <div id="app">
       <div class="box">
         <img src="photo/kitten-hearts.png" alt="cute cat" />
-        <h2>Do you accept my friendship?</h2>
+        <h2>ARE U SURE ABOUT IT? HEHEHE</h2>
 
-        <button class="yes" @click="goConfirm">YES</button>
+        <button class="yes" @click="goFinal('Yes')">YES</button>
         <button class="no" @click="goFinal('No')">NO</button>
       </div>
     </div>
@@ -64,11 +64,7 @@
       const { createApp } = Vue;
       createApp({
         methods: {
-          goConfirm() {
-            window.location.href = "confirm.html";
-          },
           goFinal(choice) {
-            // Pass "No" to final page
             localStorage.setItem("finalChoice", choice);
             window.location.href = "final.html";
           },
