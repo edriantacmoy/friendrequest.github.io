@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html>
   <head>
     <title>Friendship Question</title>
@@ -71,93 +71,6 @@
             // Pass "No" to final page
             localStorage.setItem("finalChoice", choice);
             window.location.href = "no.html";
-          },
-        },
-      }).mount("#app");
-    </script>
-  </body>
-</html>
-
-no.html : <!doctype html>
-<html>
-  <head>
-    <title>No Friendship</title>
-    <script src="https://unpkg.com/vue@3"></script>
-
-    <style>
-      body {
-        margin: 0;
-        background: #cc6c9c;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        font-family: Arial;
-        color: white;
-        text-align: center;
-      }
-
-      .box {
-        background: white;
-        color: black;
-        padding: 40px;
-        border-radius: 10px;
-        width: 300px;
-      }
-
-      img {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        border: 2px solid #444;
-      }
-
-      button {
-        margin: 10px;
-        padding: 10px 25px;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-        font-weight: bold;
-      }
-
-      .yes {
-        background: #ff6aa5;
-        color: white;
-      }
-
-      .no {
-        background: #444;
-        color: white;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div id="app">
-      <div class="box">
-        <img src="photo/cry.jpg" alt="cute cat" />
-        <h2>AYAW MO FRIEND AKO?</h2>
-
-        <button class="no" @click="goQuestion">GUSTO</button>
-      </div>
-    </div>
-
-    <script>
-      const { createApp } = Vue;
-
-      createApp({
-        methods: {
-          goFinal(choice) {
-            // Save final choice to localStorage
-            localStorage.setItem("finalChoice", choice);
-            window.location.href = "confirm.html"; // YES goes to confirm page
-          },
-          goQuestion() {
-            // NO goes back to question.html
-            window.location.href = "confirm.html";
           },
         },
       }).mount("#app");

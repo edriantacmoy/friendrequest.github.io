@@ -1,44 +1,82 @@
 <!doctype html>
 <html>
-<head>
-  <title>Enter Your Name</title>
-  <script src="https://unpkg.com/vue@3"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.12.0/dist/supabase.min.js"></script>
-  <script src="supabase.js"></script>
-  <style>
-    body{margin:0; background:#cc6c9c; display:flex; justify-content:center; align-items:center; height:100vh; font-family:Arial; color:white; text-align:center;}
-    .box{background:white;color:black;padding:40px;border-radius:10px;width:300px;}
-    input{width:80%; padding:10px; margin-bottom:20px; border-radius:10px; border:1px solid #444; font-size:16px;}
-    button{padding:10px 30px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; background:#ff6aa5; color:white; font-size:16px;}
-    button:hover{background:#ff85c1;}
-  </style>
-</head>
-<body>
-  <div id="app" class="box">
-    <h2>Enter Your Name</h2>
-    <input type="text" v-model="name" placeholder="Your name"/>
-    <br/>
-    <button @click="goQuestion">GO</button>
-  </div>
-
-  <script>
-    const { createApp } = Vue;
-
-    createApp({
-      data(){ return { name:'' }},
-      methods:{
-        async goQuestion(){
-          if(this.name.trim()===''){ alert('Please enter your name!'); return; }
-          localStorage.setItem('userName', this.name);
-
-          // Save initial row
-          const { error } = await supabase.from('friendship_responses').insert([{ name: this.name, response:null }]);
-          if(error) console.error(error);
-
-          window.location.href='question.html';
-        }
+  <head>
+    <title>Enter Your Name</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+      body {
+        margin: 0;
+        background: #cc6c9c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial;
+        color: white;
+        text-align: center;
       }
-    }).mount('#app');
-  </script>
-</body>
+      .box {
+        background: white;
+        color: black;
+        padding: 40px;
+        border-radius: 10px;
+        width: 300px;
+      }
+      input {
+        width: 80%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        border: 1px solid #444;
+        font-size: 16px;
+      }
+      button {
+        padding: 10px 30px;
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        background: #ff6aa5;
+        color: white;
+        font-size: 16px;
+      }
+      button:hover {
+        background: #ff85c1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="box">
+      <h2>Enter Your Name</h2>
+      <input type="text" v-model="name" placeholder="Your name" />
+      <br />
+      <button @click="goQuestion">GO</button>
+    </div>
+
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            name: ''
+          };
+        },
+        methods: {
+          goQuestion() {
+            if (this.name.trim() === '') {
+              alert('Please enter your name!');
+              return;
+            }
+            // Save name to localStorage
+            localStorage.setItem('userName', this.name);
+            // Navigate to question.html
+            window.location.href = 'question.html';
+          }
+        }
+      }).mount('#app');
+    </script>
+  </body>
 </html>
+
