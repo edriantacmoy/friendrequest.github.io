@@ -1,9 +1,8 @@
 <!doctype html>
 <html>
   <head>
-    <title>No Friendship</title>
+    <title>Friendship Confirmation</title>
     <script src="https://unpkg.com/vue@3"></script>
-
     <style>
       body {
         margin: 0;
@@ -16,7 +15,6 @@
         color: white;
         text-align: center;
       }
-
       .box {
         background: white;
         color: black;
@@ -24,7 +22,6 @@
         border-radius: 10px;
         width: 300px;
       }
-
       img {
         width: 150px;
         height: 150px;
@@ -33,7 +30,6 @@
         margin-bottom: 20px;
         border: 2px solid #444;
       }
-
       button {
         margin: 10px;
         padding: 10px 25px;
@@ -42,12 +38,10 @@
         cursor: pointer;
         font-weight: bold;
       }
-
       .yes {
         background: #ff6aa5;
         color: white;
       }
-
       .no {
         background: #444;
         color: white;
@@ -59,10 +53,13 @@
     <div id="app">
       <div class="box">
         <img src="photo/kitten-hearts.png" alt="cute cat" />
-        <h2>AYAW MO FRIEND AKO?</h2>
+        <h2>ARE U SURE ABOUT IT? HEHEHE</h2>
 
+        <!-- YES goes to final.html -->
         <button class="yes" @click="goFinal('Yes')">YES</button>
-        <button class="no" @click="goQuestion">NO</button>
+
+        <!-- NO goes to no.html -->
+        <button class="no" @click="goNo('No')">NO</button>
       </div>
     </div>
 
@@ -72,13 +69,14 @@
       createApp({
         methods: {
           goFinal(choice) {
-            // Save final choice to localStorage
+            // Save choice and go to final page
             localStorage.setItem("finalChoice", choice);
-            window.location.href = "confirm.html"; // YES goes to confirm page
+            window.location.href = "final.html";
           },
-          goQuestion() {
-            // NO goes back to question.html
-            window.location.href = "confirm.html";
+          goNo(choice) {
+            // Save choice and go to no.html
+            localStorage.setItem("finalChoice", choice);
+            window.location.href = "no.html";
           },
         },
       }).mount("#app");
