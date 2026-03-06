@@ -62,16 +62,36 @@
       </div>
     </div>
 
+    <script src="supabase.js"></script>
     <script>
       const { createApp } = Vue;
+
       createApp({
         methods: {
-          goFinal() {
+          async goFinal() {
+            const name = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", "Yes");
+
+            const { error } = await supabase
+              .from("friendship_responses")
+              .update({ response: "Yes" })
+              .eq("name", name)
+              .is("response", null);
+            if (error) console.error(error);
+
             window.location.href = "final.html";
           },
-          goNo() {
+          async goNo() {
+            const name = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", "No");
+
+            const { error } = await supabase
+              .from("friendship_responses")
+              .update({ response: "No" })
+              .eq("name", name)
+              .is("response", null);
+            if (error) console.error(error);
+
             window.location.href = "no.html";
           },
         },

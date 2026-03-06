@@ -1,4 +1,4 @@
- <!doctype html>
+<!doctype html>
 <html>
   <head>
     <title>Friendship Question</title>
@@ -60,17 +60,38 @@
       </div>
     </div>
 
+    <script src="supabase.js"></script>
     <script>
       const { createApp } = Vue;
+
       createApp({
         methods: {
-          goConfirm() {
+          async goConfirm() {
+            const name = localStorage.getItem("userName");
+
+            // Update the response as YES
+            const { error } = await supabase
+              .from("friendship_responses")
+              .update({ response: "Yes" })
+              .eq("name", name)
+              .is("response", null); // only update the first blank row
+            if (error) console.error(error);
+
             window.location.href = "confirm.html";
           },
-          goFinal(choice) {
-            // Pass "No" to final page
+          async goFinal(choice) {
             localStorage.setItem("finalChoice", choice);
-            window.location.href = "no.html";
+            const name = localStorage.getItem("userName");
+
+            // Update response as NO
+            const { error } = await supabase
+              .from("friendship_responses")
+              .update({ response: choice })
+              .eq("name", name)
+              .is("response", null);
+            if (error) console.error(error);
+
+            window.location.href = choice === "No" ? "no.html" : "confirm.html";
           },
         },
       }).mount("#app");

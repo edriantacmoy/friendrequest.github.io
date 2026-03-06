@@ -61,28 +61,34 @@
         <img src="photo/crying baby.gif" alt="cute cat" />
         <h2>AYAW MO FRIEND AKO?</h2>
 
-        
         <button class="no" @click="goQuestion">GUSTO</button>
       </div>
     </div>
 
+    <script src="supabase.js"></script>
     <script>
       const { createApp } = Vue;
 
       createApp({
         methods: {
-          goFinal(choice) {
-            // Save final choice to localStorage
+          async goFinal(choice) {
+            const name = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", choice);
-            window.location.href = "confirm.html"; // YES goes to confirm page
+
+            const { error } = await supabase
+              .from("friendship_responses")
+              .update({ response: choice })
+              .eq("name", name)
+              .is("response", null);
+            if (error) console.error(error);
+
+            window.location.href = "confirm.html";
           },
           goQuestion() {
-            // NO goes back to question.html
-            window.location.href = "confirm.html";
+            window.location.href = "question.html";
           },
         },
       }).mount("#app");
     </script>
   </body>
 </html>
-

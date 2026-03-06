@@ -54,29 +54,36 @@
       <button @click="goQuestion">GO</button>
     </div>
 
-    <script>
-      const { createApp } = Vue;
+   <script src="supabase.js"></script>
+<script>
+  const { createApp } = Vue;
 
-      createApp({
-        data() {
-          return {
-            name: ''
-          };
-        },
-        methods: {
-          goQuestion() {
-            if (this.name.trim() === '') {
-              alert('Please enter your name!');
-              return;
-            }
-            // Save name to localStorage
-            localStorage.setItem('userName', this.name);
-            // Navigate to question.html
-            window.location.href = 'question.html';
-          }
+  createApp({
+    data() {
+      return { name: '' }
+    },
+    methods: {
+      async goQuestion() {
+        if (this.name.trim() === '') {
+          alert('Please enter your name!');
+          return;
         }
-      }).mount('#app');
-    </script>
+
+        // Save name to localStorage for later use
+        localStorage.setItem('userName', this.name);
+
+        // Save name to Supabase with empty response
+        const { error } = await supabase
+          .from('friendship_responses')
+          .insert([{ name: this.name, response: null }]);
+        if (error) console.error(error);
+
+        // Navigate to question.html
+        window.location.href = 'question.html';
+      }
+    }
+  }).mount('#app');
+</script>
   </body>
 </html>
 
