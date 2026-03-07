@@ -197,163 +197,46 @@
       <img src="photo/minions.gif" alt="celebration" />
     </div>
 
+    <!-- YouTube Audio Player (hidden) -->
+    <div style="display: none">
+      <div id="player"></div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-      // ==================== CELEBRATION MUSIC ====================
-      let audioContext;
-      let musicStarted = false;
+      // ==================== YOUTUBE MUSIC ====================
+      var player;
+      var musicStarted = false;
 
-      function initAudio() {
-        if (!audioContext) {
-          audioContext = new (
-            window.AudioContext || window.webkitAudioContext
-          )();
-        }
-        return audioContext;
-      }
-
-      function playNote(frequency, startTime, duration, type, volume) {
-        const ctx = initAudio();
-        const oscillator = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-
-        oscillator.connect(gainNode);
-        gainNode.connect(ctx.destination);
-
-        oscillator.frequency.value = frequency;
-        oscillator.type = type;
-
-        gainNode.gain.setValueAtTime(0, startTime);
-        gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.05);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-
-        oscillator.start(startTime);
-        oscillator.stop(startTime + duration);
-      }
-
-      function playCelebrationMelody() {
-        const ctx = initAudio();
-        const now = ctx.currentTime;
-        const tempo = 0.35;
-
-        const notes = {
-          C3: 130.81,
-          D3: 146.83,
-          E3: 164.81,
-          F3: 174.61,
-          G3: 196.0,
-          A3: 220.0,
-          B3: 246.94,
-          C4: 261.63,
-          D4: 293.66,
-          E4: 329.63,
-          F4: 349.23,
-          G4: 392.0,
-          A4: 440.0,
-          B4: 493.88,
-          C5: 523.25,
-          D5: 587.33,
-          E5: 659.25,
-          F5: 698.46,
-          G5: 783.99,
-          A5: 880.0,
-          B5: 987.77,
-          C6: 1046.5,
-        };
-
-        const melody = [
-          { note: "C5", dur: 0.3 },
-          { note: "E5", dur: 0.3 },
-          { note: "G5", dur: 0.3 },
-          { note: "C6", dur: 0.6 },
-          { note: "G5", dur: 0.3 },
-          { note: "E5", dur: 0.3 },
-          { note: "C5", dur: 0.3 },
-          { note: "D5", dur: 0.3 },
-          { note: "E5", dur: 0.5 },
-          { note: "G5", dur: 0.5 },
-          { note: "F5", dur: 0.3 },
-          { note: "A5", dur: 0.3 },
-          { note: "C6", dur: 0.3 },
-          { note: "A5", dur: 0.3 },
-          { note: "G5", dur: 0.3 },
-          { note: "E5", dur: 0.3 },
-          { note: "G5", dur: 0.6 },
-          { note: "C6", dur: 0.2 },
-          { note: "B5", dur: 0.2 },
-          { note: "A5", dur: 0.2 },
-          { note: "G5", dur: 0.2 },
-          { note: "E5", dur: 0.3 },
-          { note: "G5", dur: 0.5 },
-          { note: "C6", dur: 0.8 },
-        ];
-
-        let time = 0;
-        melody.forEach((item) => {
-          if (notes[item.note]) {
-            playNote(
-              notes[item.note],
-              now + time,
-              item.dur * tempo,
-              "sine",
-              0.12,
-            );
-            const harmonyNote = item.note.replace("5", "4").replace("6", "5");
-            if (notes[harmonyNote]) {
-              playNote(
-                notes[harmonyNote],
-                now + time,
-                item.dur * tempo,
-                "sine",
-                0.06,
-              );
-            }
-          }
-          time += item.dur * tempo;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player("player", {
+          height: "0",
+          width: "0",
+          videoId: "4chSrNYpHUI",
+          playerVars: {
+            autoplay: 1,
+            loop: 1,
+            playlist: "4chSrNYpHUI",
+          },
+          events: {
+            onReady: function (event) {
+              event.target.setVolume(50);
+            },
+          },
         });
-
-        const bassLine = [
-          { note: "C3", dur: 1 },
-          { note: "G3", dur: 1 },
-          { note: "C3", dur: 1 },
-          { note: "G3", dur: 1 },
-          { note: "F3", dur: 1 },
-          { note: "C3", dur: 1 },
-          { note: "G3", dur: 1 },
-          { note: "C3", dur: 1 },
-        ];
-
-        let bassTime = 0;
-        bassLine.forEach((item) => {
-          if (notes[item.note]) {
-            playNote(
-              notes[item.note],
-              now + bassTime,
-              item.dur * tempo,
-              "triangle",
-              0.1,
-            );
-          }
-          bassTime += item.dur * tempo;
-        });
-      }
-
-      function startCelebrationMusic() {
-        function playLoop() {
-          playCelebrationMelody();
-          setTimeout(playLoop, 15000);
-        }
-        playLoop();
       }
 
       function startMusic() {
         if (!musicStarted) {
           musicStarted = true;
-          startCelebrationMusic();
+          if (player && player.playVideo) {
+            player.playVideo();
+          }
         }
       }
 
       window.addEventListener("load", () => {
-        setTimeout(startMusic, 500);
+        // Music will start on user interaction due to browser autoplay policies
       });
       window.addEventListener("click", startMusic, { once: true });
       window.addEventListener("touchstart", startMusic, { once: true });
