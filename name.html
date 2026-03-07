@@ -3,75 +3,196 @@
   <head>
     <title>Enter Your Name</title>
     <script src="https://unpkg.com/vue@3"></script>
+    <!-- Google Fonts - Quicksand -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts - Pacifico -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
+      * {
         margin: 0;
-        background: #cc6c9c;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Quicksand", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #cc6c9c 0%,
+          #e889b5 50%,
+          #ff9fc7 100%
+        );
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        font-family: Arial;
         color: white;
         text-align: center;
+        overflow: hidden;
       }
-      .box {
+
+      .sparkles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
         background: white;
-        color: black;
-        padding: 40px;
-        border-radius: 10px;
-        width: 300px;
+        border-radius: 50%;
+        animation: twinkle 2s ease-in-out infinite;
       }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .box {
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
+        padding: 50px;
+        border-radius: 30px;
+        width: 380px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        animation: slideUp 0.6s ease-out;
+      }
+
+      @keyframes slideUp {
+        0% {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        font-family: "Pacifico", cursive;
+        font-size: 28px;
+        margin-bottom: 30px;
+        color: #cc6c9c;
+      }
+
       input {
-        width: 80%;
-        padding: 10px;
-        margin-bottom: 20px;
-        border-radius: 10px;
-        border: 1px solid #444;
-        font-size: 16px;
+        width: 100%;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        border-radius: 50px;
+        border: 2px solid #ff9fc7;
+        font-size: 18px;
+        font-family: "Quicksand", sans-serif;
+        outline: none;
+        transition: all 0.3s ease;
       }
+
+      input:focus {
+        border-color: #ff6aa5;
+        box-shadow: 0 0 20px rgba(255, 106, 165, 0.3);
+      }
+
       button {
-        padding: 10px 30px;
+        padding: 15px 50px;
         border: none;
-        border-radius: 20px;
+        border-radius: 50px;
         font-weight: bold;
         cursor: pointer;
-        background: #ff6aa5;
+        background: linear-gradient(45deg, #ff6aa5, #ff85c1);
         color: white;
-        font-size: 16px;
+        font-size: 18px;
+        font-family: "Quicksand", sans-serif;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(255, 106, 165, 0.4);
       }
+
       button:hover {
-        background: #ff85c1;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(255, 106, 165, 0.6);
+      }
+
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
       }
     </style>
   </head>
 
   <body>
+    <div class="sparkles" id="sparkles"></div>
     <div id="app" class="box">
-      <h2>Enter Your Name</h2>
-      <input type="text" v-model="name" placeholder="Your name" />
+      <h2>What's Your Name? 💕</h2>
+      <input
+        type="text"
+        v-model="name"
+        placeholder="Enter your name"
+        @keyup.enter="goQuestion"
+      />
       <br />
-      <button @click="goQuestion">GO</button>
+      <button @click="goQuestion" :disabled="loading">
+        {{ loading ? 'Saving...' : "Let's Go →" }}
+      </button>
     </div>
 
     <script>
-      const { createApp } = Vue;
+      // Create sparkles
+      function createSparkles() {
+        const container = document.getElementById("sparkles");
+        for (let i = 0; i < 30; i++) {
+          const sparkle = document.createElement("div");
+          sparkle.className = "sparkle";
+          sparkle.style.left = Math.random() * 100 + "%";
+          sparkle.style.top = Math.random() * 100 + "%";
+          sparkle.style.animationDelay = Math.random() * 2 + "s";
+          container.appendChild(sparkle);
+        }
+      }
+      createSparkles();
 
+      const { createApp } = Vue;
       createApp({
         data() {
-          return {
-            name: "",
-          };
+          return { name: "", loading: false };
         },
         methods: {
           goQuestion() {
             if (this.name.trim() === "") {
-              alert("Please enter your name!");
+              alert("Please enter your name! ✨");
               return;
             }
-            // Save name to localStorage
-            localStorage.setItem("userName", this.name);
-            // Navigate to question.html
+
+            this.loading = true;
+            const userName = this.name.trim();
+
+            // Save to localStorage
+            localStorage.setItem("userName", userName);
+            this.loading = false;
+
+            // Navigate
             window.location.href = "question.html";
           },
         },
@@ -79,4 +200,3 @@
     </script>
   </body>
 </html>
-

@@ -3,74 +3,252 @@
   <head>
     <title>Friendship Confirmation</title>
     <script src="https://unpkg.com/vue@3"></script>
+    <!-- Google Fonts - Quicksand -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts - Pacifico -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
+      * {
         margin: 0;
-        background: #cc6c9c;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Quicksand", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #cc6c9c 0%,
+          #e889b5 50%,
+          #ff9fc7 100%
+        );
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        font-family: Arial;
         color: white;
         text-align: center;
+        overflow: hidden;
       }
-      .box {
+
+      .waves {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .wave {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 200%;
+        height: 100px;
+        background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 C150,120 350,0 600,60 C850,120 1050,0 1200,60 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.2)"/></svg>');
+        background-size: 50% 100%;
+        animation: wave 8s linear infinite;
+      }
+
+      .wave:nth-child(2) {
+        bottom: 5px;
+        opacity: 0.5;
+        animation: wave 12s linear infinite reverse;
+      }
+
+      @keyframes wave {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      .sparkles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
         background: white;
-        color: black;
+        border-radius: 50%;
+        animation: sparkle 1.5s ease-in-out infinite;
+      }
+
+      @keyframes sparkle {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .box {
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
         padding: 40px;
-        border-radius: 10px;
-        width: 300px;
+        border-radius: 30px;
+        width: 350px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.5s ease-out;
       }
+
+      @keyframes slideIn {
+        0% {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
       img {
-        width: 150px;
-        height: 150px;
+        width: 160px;
+        height: 160px;
         object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        border: 2px solid #444;
-      }
-      button {
-        margin: 10px;
-        padding: 10px 25px;
-        border: none;
         border-radius: 20px;
+        margin-bottom: 25px;
+        border: 3px solid #ff9fc7;
+        animation: wiggle 2s ease-in-out infinite;
+      }
+
+      @keyframes wiggle {
+        0%,
+        100% {
+          transform: rotate(-3deg);
+        }
+        50% {
+          transform: rotate(3deg);
+        }
+      }
+
+      h2 {
+        font-family: "Pacifico", cursive;
+        font-size: 22px;
+        margin-bottom: 25px;
+        color: #cc6c9c;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      button {
+        padding: 15px 35px;
+        border: none;
+        border-radius: 50px;
         cursor: pointer;
         font-weight: bold;
+        font-size: 18px;
+        font-family: "Quicksand", sans-serif;
+        transition: all 0.3s ease;
       }
+
       .yes {
-        background: #ff6aa5;
+        background: linear-gradient(45deg, #ff6aa5, #ff85c1);
         color: white;
+        box-shadow: 0 5px 20px rgba(255, 106, 165, 0.4);
       }
+
+      .yes:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(255, 106, 165, 0.6);
+      }
+
       .no {
-        background: #444;
+        background: linear-gradient(45deg, #666, #888);
         color: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .no:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+      button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
       }
     </style>
   </head>
 
   <body>
+    <div class="sparkles" id="sparkles"></div>
+    <div class="waves">
+      <div class="wave"></div>
+      <div class="wave"></div>
+    </div>
     <div id="app">
       <div class="box">
-        <img src="photo/happy.png" alt="cute cat" />
-        <h2>ARE U SURE ABOUT IT? HEHEHE</h2>
+        <img src="photo/happy.png" alt="happy" />
+        <h2>Are you sure? Hehehe 😄</h2>
 
-        <!-- YES goes to final.html -->
-        <button class="yes" @click="goFinal">YES</button>
-        <!-- NO goes to no.html -->
-        <button class="no" @click="goNo">NO</button>
+        <div class="buttons">
+          <button class="yes" @click="goFinal" :disabled="loading">YES</button>
+          <button class="no" @click="goNo" :disabled="loading">NO</button>
+        </div>
       </div>
     </div>
 
     <script>
+      function createSparkles() {
+        const container = document.getElementById("sparkles");
+        for (let i = 0; i < 25; i++) {
+          const sparkle = document.createElement("div");
+          sparkle.className = "sparkle";
+          sparkle.style.left = Math.random() * 100 + "%";
+          sparkle.style.top = Math.random() * 100 + "%";
+          sparkle.style.animationDelay = Math.random() * 1.5 + "s";
+          container.appendChild(sparkle);
+        }
+      }
+      createSparkles();
+
       const { createApp } = Vue;
       createApp({
+        data() {
+          return { loading: false };
+        },
         methods: {
           goFinal() {
+            this.loading = true;
             localStorage.setItem("finalChoice", "Yes");
             window.location.href = "final.html";
           },
+
           goNo() {
+            this.loading = true;
             localStorage.setItem("finalChoice", "No");
             window.location.href = "no.html";
           },

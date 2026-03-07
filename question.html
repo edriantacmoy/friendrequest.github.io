@@ -3,64 +3,194 @@
   <head>
     <title>Friendship Question</title>
     <script src="https://unpkg.com/vue@3"></script>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
+      * {
         margin: 0;
-        background: #cc6c9c;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Quicksand", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #cc6c9c 0%,
+          #e889b5 50%,
+          #ff9fc7 100%
+        );
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        font-family: Arial;
         color: white;
         text-align: center;
+        overflow: hidden;
       }
+
+      .bg-effects {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .floating {
+        position: absolute;
+        font-size: 30px;
+        opacity: 0.2;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(10deg);
+        }
+      }
+
       .box {
-        background: white;
-        color: black;
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
         padding: 40px;
-        border-radius: 10px;
-        width: 300px;
+        border-radius: 30px;
+        width: 350px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        animation: popIn 0.5s ease-out;
       }
+
+      @keyframes popIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        70% {
+          transform: scale(1.05);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
       img {
-        width: 150px;
-        height: 150px;
+        width: 160px;
+        height: 160px;
         object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        border: 2px solid #444;
-      }
-      button {
-        margin: 10px;
-        padding: 10px 25px;
-        border: none;
         border-radius: 20px;
+        margin-bottom: 25px;
+        border: 3px solid #ff9fc7;
+        animation: bounce 2s ease-in-out infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      h2 {
+        font-family: "Pacifico", cursive;
+        font-size: 24px;
+        margin-bottom: 25px;
+        color: #cc6c9c;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      button {
+        padding: 15px 35px;
+        border: none;
+        border-radius: 50px;
         cursor: pointer;
         font-weight: bold;
+        font-size: 18px;
+        font-family: "Quicksand", sans-serif;
+        transition: all 0.3s ease;
       }
+
       .yes {
-        background: #ff6aa5;
+        background: linear-gradient(45deg, #ff6aa5, #ff85c1);
         color: white;
+        box-shadow: 0 5px 20px rgba(255, 106, 165, 0.4);
       }
+
+      .yes:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(255, 106, 165, 0.6);
+      }
+
       .no {
-        background: #444;
+        background: linear-gradient(45deg, #666, #888);
         color: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .no:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      button:active {
+        transform: scale(0.95);
       }
     </style>
   </head>
 
   <body>
+    <div class="bg-effects" id="effects"></div>
     <div id="app">
       <div class="box">
-        <img src="photo/smile.jpg" alt="cute cat" />
-        <h2>Do you accept my friendship?</h2>
+        <img src="photo/uwu.gif" alt="cute" />
+        <h2>Will you be my friend? 💕</h2>
 
-        <button class="yes" @click="goConfirm">YES</button>
-        <button class="no" @click="goFinal('No')">NO</button>
+        <div class="buttons">
+          <button class="yes" @click="goConfirm">YES</button>
+          <button class="no" @click="goFinal('No')">NO</button>
+        </div>
       </div>
     </div>
 
     <script>
+      function createEffects() {
+        const container = document.getElementById("effects");
+        const symbols = ["💭", "💕", "💖", "❓", "✨"];
+        for (let i = 0; i < 12; i++) {
+          const el = document.createElement("div");
+          el.className = "floating";
+          el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+          el.style.left = Math.random() * 100 + "%";
+          el.style.top = Math.random() * 100 + "%";
+          el.style.animationDelay = Math.random() * 6 + "s";
+          container.appendChild(el);
+        }
+      }
+      createEffects();
+
       const { createApp } = Vue;
       createApp({
         methods: {
@@ -68,7 +198,6 @@
             window.location.href = "confirm.html";
           },
           goFinal(choice) {
-            // Pass "No" to final page
             localStorage.setItem("finalChoice", choice);
             window.location.href = "no.html";
           },
