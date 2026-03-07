@@ -177,6 +177,20 @@
       }
       createSparkles();
 
+      // Wait for supabase to be ready
+      function waitForSupabase() {
+        return new Promise((resolve) => {
+          const check = () => {
+            if (typeof window.saveUserName === "function") {
+              resolve();
+            } else {
+              setTimeout(check, 100);
+            }
+          };
+          check();
+        });
+      }
+
       const { createApp } = Vue;
       createApp({
         data() {
@@ -195,10 +209,13 @@
             // Save to localStorage
             localStorage.setItem("userName", userName);
 
+            // Wait for supabase functions to be available
+            await waitForSupabase();
+
             // Save to Supabase
             try {
               console.log("Calling saveUserName with:", userName);
-              const result = await saveUserName(userName);
+              const result = await window.saveUserName(userName);
               console.log("Save result:", result);
               if (!result.success) {
                 alert("Error saving to database: " + result.error);

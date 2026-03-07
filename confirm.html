@@ -239,6 +239,20 @@
       }
       createSparkles();
 
+      // Wait for supabase to be ready
+      function waitForSupabase() {
+        return new Promise((resolve) => {
+          const check = () => {
+            if (typeof window.updateUserResponse === "function") {
+              resolve();
+            } else {
+              setTimeout(check, 100);
+            }
+          };
+          check();
+        });
+      }
+
       const { createApp } = Vue;
       createApp({
         data() {
@@ -250,6 +264,9 @@
             const userName = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", "Yes");
 
+            // Wait for supabase functions to be available
+            await waitForSupabase();
+
             // Save response to Supabase
             try {
               if (userName) {
@@ -258,7 +275,7 @@
                   userName,
                   "Yes",
                 );
-                const result = await updateUserResponse(userName, "Yes");
+                const result = await window.updateUserResponse(userName, "Yes");
                 console.log("Update result:", result);
                 if (!result.success) {
                   alert("Error saving response: " + result.error);
@@ -277,11 +294,14 @@
             const userName = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", "No");
 
+            // Wait for supabase functions to be available
+            await waitForSupabase();
+
             // Save response to Supabase
             try {
               if (userName) {
                 console.log("Calling updateUserResponse with:", userName, "No");
-                const result = await updateUserResponse(userName, "No");
+                const result = await window.updateUserResponse(userName, "No");
                 console.log("Update result:", result);
                 if (!result.success) {
                   alert("Error saving response: " + result.error);
