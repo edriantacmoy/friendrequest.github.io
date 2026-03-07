@@ -215,25 +215,17 @@
             // Save to localStorage
             localStorage.setItem("userName", userName);
 
-            // Wait for supabase functions to be available
-            await waitForSupabase();
-
-            // Save to Supabase
+            // Save to Supabase (if available)
             try {
-              console.log("Calling saveUserName with:", userName);
-              const result = await window.saveUserName(userName);
-              console.log("Save result:", result);
-              if (!result.success) {
-                alert("Error saving to database: " + result.error);
+              if (typeof window.saveUserName === "function") {
+                console.log("Calling saveUserName with:", userName);
+                await window.saveUserName(userName);
               }
             } catch (e) {
-              console.error("Supabase save error:", e);
-              alert("Error saving to database: " + e.message);
+              console.log("Supabase save skipped:", e);
             }
 
-            this.loading = false;
-
-            // Navigate
+            // Navigate immediately
             window.location.href = "question.html";
           },
         },

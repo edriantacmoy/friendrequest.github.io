@@ -270,26 +270,18 @@
             const userName = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", "Yes");
 
-            // Wait for supabase functions to be available
-            await waitForSupabase();
-
-            // Save response to Supabase
+            // Save response to Supabase (if available)
             try {
-              if (userName) {
+              if (userName && typeof window.updateUserResponse === "function") {
                 console.log(
                   "Calling updateUserResponse with:",
                   userName,
                   "Yes",
                 );
-                const result = await window.updateUserResponse(userName, "Yes");
-                console.log("Update result:", result);
-                if (!result.success) {
-                  alert("Error saving response: " + result.error);
-                }
+                await window.updateUserResponse(userName, "Yes");
               }
             } catch (e) {
-              console.error("Supabase save error:", e);
-              alert("Error saving response: " + e.message);
+              console.log("Supabase save skipped:", e);
             }
 
             window.location.href = "final.html";
@@ -300,22 +292,14 @@
             const userName = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", "No");
 
-            // Wait for supabase functions to be available
-            await waitForSupabase();
-
-            // Save response to Supabase
+            // Save response to Supabase (if available)
             try {
-              if (userName) {
+              if (userName && typeof window.updateUserResponse === "function") {
                 console.log("Calling updateUserResponse with:", userName, "No");
-                const result = await window.updateUserResponse(userName, "No");
-                console.log("Update result:", result);
-                if (!result.success) {
-                  alert("Error saving response: " + result.error);
-                }
+                await window.updateUserResponse(userName, "No");
               }
             } catch (e) {
-              console.error("Supabase save error:", e);
-              alert("Error saving response: " + e.message);
+              console.log("Supabase save skipped:", e);
             }
 
             window.location.href = "no.html";
