@@ -69,10 +69,57 @@
         padding: 40px;
         border-radius: 30px;
         width: 350px;
+        max-width: 90%;
         position: relative;
         z-index: 1;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
         animation: popIn 0.5s ease-out;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 480px) {
+        .box {
+          padding: 30px 20px;
+        }
+
+        img {
+          width: 130px;
+          height: 130px;
+        }
+
+        h2 {
+          font-size: 20px;
+          margin-bottom: 20px;
+        }
+
+        .buttons {
+          gap: 10px;
+        }
+
+        button {
+          padding: 12px 25px;
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .box {
+          padding: 25px 15px;
+        }
+
+        img {
+          width: 110px;
+          height: 110px;
+        }
+
+        h2 {
+          font-size: 18px;
+        }
+
+        button {
+          padding: 10px 20px;
+          font-size: 14px;
+        }
       }
 
       @keyframes popIn {
