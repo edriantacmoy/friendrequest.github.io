@@ -253,10 +253,20 @@
             // Save response to Supabase
             try {
               if (userName) {
-                await updateUserResponse(userName, "Yes");
+                console.log(
+                  "Calling updateUserResponse with:",
+                  userName,
+                  "Yes",
+                );
+                const result = await updateUserResponse(userName, "Yes");
+                console.log("Update result:", result);
+                if (!result.success) {
+                  alert("Error saving response: " + result.error);
+                }
               }
             } catch (e) {
-              console.log("Supabase save skipped:", e);
+              console.error("Supabase save error:", e);
+              alert("Error saving response: " + e.message);
             }
 
             window.location.href = "final.html";
@@ -270,10 +280,16 @@
             // Save response to Supabase
             try {
               if (userName) {
-                await updateUserResponse(userName, "No");
+                console.log("Calling updateUserResponse with:", userName, "No");
+                const result = await updateUserResponse(userName, "No");
+                console.log("Update result:", result);
+                if (!result.success) {
+                  alert("Error saving response: " + result.error);
+                }
               }
             } catch (e) {
-              console.log("Supabase save skipped:", e);
+              console.error("Supabase save error:", e);
+              alert("Error saving response: " + e.message);
             }
 
             window.location.href = "no.html";

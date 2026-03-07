@@ -197,9 +197,15 @@
 
             // Save to Supabase
             try {
-              await saveUserName(userName);
+              console.log("Calling saveUserName with:", userName);
+              const result = await saveUserName(userName);
+              console.log("Save result:", result);
+              if (!result.success) {
+                alert("Error saving to database: " + result.error);
+              }
             } catch (e) {
-              console.log("Supabase save skipped:", e);
+              console.error("Supabase save error:", e);
+              alert("Error saving to database: " + e.message);
             }
 
             this.loading = false;

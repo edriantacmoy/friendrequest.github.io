@@ -8,9 +8,12 @@ const SUPABASE_KEY =
 // Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+console.log("Supabase client initialized:", !!supabase);
+
 // Function to save user name to Supabase
 async function saveUserName(name) {
   try {
+    console.log("Saving name to Supabase:", name);
     const { data, error } = await supabase.from("friendship_responses").insert([
       {
         name: name,
@@ -18,7 +21,10 @@ async function saveUserName(name) {
       },
     ]);
 
-    if (error) throw error;
+    if (error) {
+      console.error("Supabase error:", error);
+      throw error;
+    }
     console.log("Name saved successfully:", data);
     return { success: true, data };
   } catch (error) {
@@ -30,13 +36,17 @@ async function saveUserName(name) {
 // Function to update user response in Supabase
 async function updateUserResponse(name, response) {
   try {
+    console.log("Updating response in Supabase:", name, response);
     const { data, error } = await supabase
       .from("friendship_responses")
       .update({ response: response })
       .eq("name", name)
       .select();
 
-    if (error) throw error;
+    if (error) {
+      console.error("Supabase error:", error);
+      throw error;
+    }
     console.log("Response saved successfully:", data);
     return { success: true, data };
   } catch (error) {
@@ -44,3 +54,8 @@ async function updateUserResponse(name, response) {
     return { success: false, error: error.message };
   }
 }
+
+// Expose functions to global scope
+window.saveUserName = saveUserName;
+window.updateUserResponse = updateUserResponse;
+console.log("Supabase functions exposed to global scope");
