@@ -239,13 +239,19 @@
       }
       createSparkles();
 
-      // Wait for supabase to be ready
+      // Wait for supabase to be ready (max 2 seconds)
       function waitForSupabase() {
         return new Promise((resolve) => {
+          let attempts = 0;
+          const maxAttempts = 20; // 20 * 100ms = 2 seconds
           const check = () => {
             if (typeof window.updateUserResponse === "function") {
               resolve();
+            } else if (attempts >= maxAttempts) {
+              console.warn("Supabase not loaded, proceeding anyway");
+              resolve();
             } else {
+              attempts++;
               setTimeout(check, 100);
             }
           };
