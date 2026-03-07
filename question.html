@@ -52,46 +52,25 @@
   <body>
     <div id="app">
       <div class="box">
-        <img src="photo/uwu.gif" alt="cute cat" />
-        <h2>Can u be my friend?</h2>
+        <img src="photo/smile.jpg" alt="cute cat" />
+        <h2>Do you accept my friendship?</h2>
 
         <button class="yes" @click="goConfirm">YES</button>
         <button class="no" @click="goFinal('No')">NO</button>
       </div>
     </div>
 
-    <script src="supabase.js"></script>
     <script>
       const { createApp } = Vue;
-
       createApp({
         methods: {
-          async goConfirm() {
-            const name = localStorage.getItem("userName");
-
-            // Update the response as YES
-            const { error } = await supabase
-              .from("friendship_responses")
-              .update({ response: "Yes" })
-              .eq("name", name)
-              .is("response", null); // only update the first blank row
-            if (error) console.error(error);
-
+          goConfirm() {
             window.location.href = "confirm.html";
           },
-          async goFinal(choice) {
+          goFinal(choice) {
+            // Pass "No" to final page
             localStorage.setItem("finalChoice", choice);
-            const name = localStorage.getItem("userName");
-
-            // Update response as NO
-            const { error } = await supabase
-              .from("friendship_responses")
-              .update({ response: choice })
-              .eq("name", name)
-              .is("response", null);
-            if (error) console.error(error);
-
-            window.location.href = choice === "No" ? "no.html" : "confirm.html";
+            window.location.href = "no.html";
           },
         },
       }).mount("#app");
