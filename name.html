@@ -3,6 +3,10 @@
   <head>
     <title>Enter Your Name</title>
     <script src="https://unpkg.com/vue@3"></script>
+    <!-- Include Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Include Supabase Client -->
+    <script src="supabase.js"></script>
     <!-- Google Fonts - Quicksand -->
     <link
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap"
@@ -179,7 +183,7 @@
           return { name: "", loading: false };
         },
         methods: {
-          goQuestion() {
+          async goQuestion() {
             if (this.name.trim() === "") {
               alert("Please enter your name! ✨");
               return;
@@ -190,6 +194,14 @@
 
             // Save to localStorage
             localStorage.setItem("userName", userName);
+
+            // Save to Supabase
+            try {
+              await saveUserName(userName);
+            } catch (e) {
+              console.log("Supabase save skipped:", e);
+            }
+
             this.loading = false;
 
             // Navigate

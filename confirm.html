@@ -3,6 +3,10 @@
   <head>
     <title>Friendship Confirmation</title>
     <script src="https://unpkg.com/vue@3"></script>
+    <!-- Include Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Include Supabase Client -->
+    <script src="supabase.js"></script>
     <!-- Google Fonts - Quicksand -->
     <link
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap"
@@ -241,15 +245,37 @@
           return { loading: false };
         },
         methods: {
-          goFinal() {
+          async goFinal() {
             this.loading = true;
+            const userName = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", "Yes");
+
+            // Save response to Supabase
+            try {
+              if (userName) {
+                await updateUserResponse(userName, "Yes");
+              }
+            } catch (e) {
+              console.log("Supabase save skipped:", e);
+            }
+
             window.location.href = "final.html";
           },
 
-          goNo() {
+          async goNo() {
             this.loading = true;
+            const userName = localStorage.getItem("userName");
             localStorage.setItem("finalChoice", "No");
+
+            // Save response to Supabase
+            try {
+              if (userName) {
+                await updateUserResponse(userName, "No");
+              }
+            } catch (e) {
+              console.log("Supabase save skipped:", e);
+            }
+
             window.location.href = "no.html";
           },
         },
